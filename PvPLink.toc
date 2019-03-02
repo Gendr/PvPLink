@@ -1,0 +1,22 @@
+## Interface: 80100
+## Title: PvPLink
+## Notes: Simplifies the PvP player search by providing character armory links.
+## Notes-deDE: Simplifies the PvP player search by providing character armory links.
+## Notes-esES: Simplifies the PvP player search by providing character armory links.
+## Notes-esMX: Simplifies the PvP player search by providing character armory links.
+## Notes-frFR: Simplifies the PvP player search by providing character armory links.
+## Notes-itIT: Simplifies the PvP player search by providing character armory links.
+## Notes-koKR: Simplifies the PvP player search by providing character armory links.
+## Notes-ptBR: Simplifies the PvP player search by providing character armory links.
+## Notes-ruRU: Simplifies the PvP player search by providing character armory links.
+## Notes-zhCN: Simplifies the PvP player search by providing character armory links.
+## Notes-zhTW: Simplifies the PvP player search by providing character armory links.
+## Author: Gendr
+## Version: 1.0
+
+## X-Category: PvP/Arena
+## X-Website: https://github.com/Gendr/PvPLink
+## X-Curse-Project-ID: 316308
+
+db_realms.lua
+PvPLink.lua

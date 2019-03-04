@@ -12,11 +12,12 @@
 ## Notes-zhCN: Simplifies the PvP player search by providing character armory links.
 ## Notes-zhTW: Simplifies the PvP player search by providing character armory links.
 ## Author: Gendr
-## Version: 1.0
+## Version: 1.1
 
 ## X-Category: PvP/Arena
 ## X-Website: https://github.com/Gendr/PvPLink
 ## X-Curse-Project-ID: 316308
+## X-WoWI-ID: 24893
 
 db_realms.lua
 PvPLink.lua

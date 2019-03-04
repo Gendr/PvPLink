@@ -54,6 +54,7 @@ if (locale == "enUS") then
 	L["PvP Link"] = "PvP Link"
 	L["World of Warcraft Link:"] = "World of Warcraft Link:"
 	L["Check-PvP Link:"] = "Check-PvP Link:"
+	L["WoW Thugger Link:"] = "WoW Thugger Link:"
 	L["Okay"] = "Okay"
 	L["PvP Link v"] = "PvP Link v"
 	L["Check-PvP Manual Copy:"] = "Check-PvP Manual Copy:"
@@ -101,14 +102,18 @@ local siteIndex = {
 
 local site = siteIndex[locale]
 local site2 = "https://check-pvp.com/database/character/?r="
+local site3 = "https://wowthugger.com/"
 
 ----------------------
 
 local viewer = CreateFrame("Frame", "PvPLinkFrame", UIParent, "UIPanelDialogTemplate")
-local editbox = CreateFrame("EditBox", "$parentEditBox", viewer, "InputBoxTemplate")
+local editbox0 = CreateFrame("EditBox", "$parentEditBox", viewer, "InputBoxTemplate")
+local editbox1 = CreateFrame("EditBox", "$parentEditBox1", viewer, "InputBoxTemplate")
 local editbox2 = CreateFrame("EditBox", "$parentEditBox2", viewer, "InputBoxTemplate")
-local editboxText = viewer:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+local editbox3 = CreateFrame("EditBox", "$parentEditBox3", viewer, "InputBoxTemplate")
+local editbox1Text = viewer:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 local editbox2Text = viewer:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+local editbox3Text = viewer:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 local button = CreateFrame("Button","$parentButton", viewer, "UIPanelButtonTemplate")
 local versionText = viewer:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 
@@ -117,15 +122,17 @@ local tip = CreateFrame("Frame", "$parentTipFrame", help)
 local tipbox = CreateFrame("EditBox", "$parentTipBox", tip, "InputBoxTemplate")
 local tipboxText = tipbox:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 
-viewer.editbox = editbox
+viewer.editbox0 = editbox0
+viewer.editbox1 = editbox1
 viewer.editbox2 = editbox2
+viewer.editbox3 = editbox3
 viewer.button = button
 viewer.help = help
 viewer.tip = tip
 viewer.tipbox = tipbox
 
 viewer:Hide()
-viewer:SetSize(475, 175)
+viewer:SetSize(475, 200)
 viewer:SetToplevel(true)
 viewer:SetPoint("CENTER", UIParent, "TOP", 0, -1 * GetScreenHeight() / 4)
 viewer.Title:SetText(L["PvP Link"])
@@ -138,21 +145,33 @@ viewer:SetScript("OnHide", function(self) tip:Hide(); help:Hide(); self:Hide() e
 viewer:SetScript("OnDragStart", function(self) self:StartMoving() end)
 viewer:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 
-editbox:SetPoint("TOPLEFT", viewer, "LEFT", 30, 50)
-editbox:SetPoint("BOTTOMRIGHT", viewer, "RIGHT", -30, -8)
-editbox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
-editbox:SetScript("OnEscapePressed", function(self) self:GetParent():Hide() end)
-editbox:SetAutoFocus(false)
-editboxText:SetText(L["World of Warcraft Link:"])
-editboxText:SetPoint("TOPLEFT", editbox, "LEFT", 0, 25)
+editbox0:SetPoint("TOPLEFT", viewer, "LEFT", 30, 100)
+editbox0:SetPoint("BOTTOMRIGHT", viewer, "RIGHT", -30, -8)
+editbox0:Hide()
 
-editbox2:SetPoint("TOPLEFT", editbox, "LEFT", 0, -75)
-editbox2:SetPoint("BOTTOMRIGHT", editbox, "RIGHT", 0, -8)
+editbox1:SetPoint("TOPLEFT", editbox0, "LEFT", 0, 0)
+editbox1:SetPoint("BOTTOMRIGHT", editbox0, "RIGHT", 0, -8)
+editbox1:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+editbox1:SetScript("OnEscapePressed", function(self) self:GetParent():Hide() end)
+editbox1:SetAutoFocus(false)
+editbox1Text:SetText(L["World of Warcraft Link:"])
+editbox1Text:SetPoint("TOPLEFT", editbox1, "LEFT", 0, 25)
+
+editbox2:SetPoint("TOPLEFT", editbox1, "LEFT", 0, -75)
+editbox2:SetPoint("BOTTOMRIGHT", editbox1, "RIGHT", 0, -8)
 editbox2:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
 editbox2:SetScript("OnEscapePressed", function(self) self:GetParent():Hide() end)
 editbox2:SetAutoFocus(false)
 editbox2Text:SetText(L["Check-PvP Link:"])
 editbox2Text:SetPoint("TOPLEFT", editbox2, "LEFT", 0, 25)
+
+editbox3:SetPoint("TOPLEFT", editbox2, "LEFT", 0, -75)
+editbox3:SetPoint("BOTTOMRIGHT", editbox2, "RIGHT", 0, -8)
+editbox3:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+editbox3:SetScript("OnEscapePressed", function(self) self:GetParent():Hide() end)
+editbox3:SetAutoFocus(false)
+editbox3Text:SetText(L["WoW Thugger Link:"])
+editbox3Text:SetPoint("TOPLEFT", editbox3, "LEFT", 0, 25)
 
 button:SetPoint("BOTTOM", viewer, "BOTTOM", 0, 10)
 button:SetSize(100, 25)
@@ -170,7 +189,7 @@ help:SetBackdrop({
 })
 help:Hide()
 help:SetSize(32, 32)
-help:SetPoint("BOTTOMRIGHT", viewer, "BOTTOMRIGHT", -2, 50)
+help:SetPoint("BOTTOMRIGHT", viewer, "BOTTOMRIGHT", -2, 83)
 help:SetScript("OnEnter", function() tip:Show() end)
 
 tip:SetBackdrop({
@@ -216,7 +235,7 @@ table.insert(UnitPopupMenus["WORLD_STATE_SCORE"], #UnitPopupMenus["WORLD_STATE_S
 
 function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset, menuList, button, autoHideDelay)
     if (dropDownFrame and level) then
-		local name, server, server2, active, custom, orig, orig_server2, temp, orig_temp
+		local name, server, server2, server3, active, custom, orig, orig_server2, temp, orig_temp
 		if (dropDownFrame.which == "BN_FRIEND") then
 			if (dropDownFrame.bnetIDAccount) then
 				local _,_,_,_,_,gameaccount,game = BNGetFriendInfoByID(dropDownFrame.bnetIDAccount)
@@ -224,6 +243,7 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 					name = select(2, BNGetGameAccountInfo(gameaccount))
 					server = select(4, BNGetGameAccountInfo(gameaccount))
 					server2 = select(4, BNGetGameAccountInfo(gameaccount))
+					server3 = select(4, BNGetGameAccountInfo(gameaccount))
 					active = true
 				else
 					active = false
@@ -234,6 +254,7 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 				name = dropDownFrame.name
 				server = dropDownFrame.server or GetRealmName()
 				server2 = dropDownFrame.server or GetRealmName()
+				server3 = dropDownFrame.server or GetRealmName()
 				active = true
 			else
 				active = false
@@ -260,8 +281,12 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 				end
 			end
 		end
+		if (server3) then
+			server3 = server3:gsub("%s", "")
+		end
 		local realm = CONST_REALM_LIST[server]
 		local realm2 = CONST_REALM_LIST[server2]
+		local realm3 = CONST_REALM_LIST[server3]
 		local buttonPrefix = "DropDownList"..level.."Button"
 		local i=2
 		while (1) do
@@ -280,9 +305,10 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 						end
 						realm2 = realm2:lower()
 
-						editbox:SetText(site..realm.."/"..name)	
+						editbox1:SetText(site..realm.."/"..name)	
 						editbox2:SetText(site2..regionIndex[locale].."&q="..name.."-"..realm2)
 						tipbox:SetText(name.."-"..realm2)
+						editbox3:SetText(site3..regionIndex[locale].."/"..realm3.."/"..name)
 						viewer:Show()
 					end
 				else
@@ -294,6 +320,7 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 							end
 							name = name:lower()
 							server2 = server
+							server3 = server
                             if (server) then 
                                 server = server:gsub("%s", "")
 							end
@@ -310,8 +337,12 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 									end
 								end
 							end
+                            if (server3) then 
+                                server3 = server3:gsub("%s", "")
+							end
 							local realm = CONST_REALM_LIST[server]
 							local realm2 = CONST_REALM_LIST[server2]
+							local realm3 = CONST_REALM_LIST[server3]
 							realm2 = realm2:gsub("(%u%l+)(%d+)", "%1 %2"):gsub("-", " ")
 							if (orig == true) then
 								realm2 = orig_server2
@@ -321,9 +352,10 @@ function PvPLink_Show(level, value, dropDownFrame, anchorName, xOffset, yOffset,
 							end
 							realm2 = realm2:lower()
 
-							editbox:SetText(site..realm.."/"..name)
+							editbox1:SetText(site..realm.."/"..name)
 							editbox2:SetText(site2..regionIndex[locale].."&q="..name.."-"..realm2)
 							tipbox:SetText(name.."-"..realm2)
+							editbox3:SetText(site3..regionIndex[locale].."/"..realm3.."/"..name)
 							viewer:Show()
 						else
 							out("|cffFF0000Player not logged into WoW|r")

@@ -4,7 +4,7 @@ Simplifies the PvP player search by providing character armory links.
 
 ## Overview
 
-Provides character links to World of Warcraft and Check-PvP websites.
+Provides character links to World of Warcraft, Check-PvP and WoW Thugger websites.
 
 To use, right-click on the following:
 + Contacts list (In game & BNet)
